@@ -1,4 +1,4 @@
-URL="https://data.lacity.org/resource/pi9x-tg5x.csv?\$where=issue_date>'2024-06-01T00:00:00.000'"
+URL="https://data.lacity.org/resource/pi9x-tg5x.csv?\$where=issue_date>'2024-06-01T00:00:00.000'&\$limit=1000000"
 
 # Use the data loader cache directory to store the downloaded data.
 TMPDIR="src/.observablehq/cache/"
