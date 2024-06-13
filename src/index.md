@@ -17,6 +17,10 @@ const formattedPermits = view(Inputs.table(permits, {
 }))
 ```
 
+```js
+const groups = d3.rollup(formattedPermits, v => v.length, d => d.use_desc)
+```
+
 ```js echo
-formattedPermits
+groups
 ```
