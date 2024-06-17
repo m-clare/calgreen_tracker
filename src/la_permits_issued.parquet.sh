@@ -1,4 +1,5 @@
-URL="https://data.lacity.org/resource/pi9x-tg5x.csv?\$where=issue_date>'2024-06-01T00:00:00.000'&\$limit=1000000"
+CODE="pi9x-tg5x"
+URL="https://data.lacity.org/resource/${CODE}.csv?\$query=SELECT%20*%20WHERE%20permit_sub_type%20!=%20'1%20or%202%20Family%20Dwelling'%20AND%20issue_date>'2024-06-01T00:00:00.000'%20LIMIT%201000000"
 
 # Use the data loader cache directory to store the downloaded data.
 TMPDIR="src/.observablehq/cache/"
