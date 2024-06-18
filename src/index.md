@@ -88,10 +88,10 @@ const geoBuildingData = {
 }
 
 formattedPermits.map((permit) => {
-  const {geolocation, ...rest} = permit;
+  const {geolocation, use_desc, ...rest} = permit;
   geoBuildingData.features.push({
     type: "Feature",
-    properties: {...rest},
+    properties: {use_desc: use_desc},
     geometry: { type: "Point", coordinates: parseGeolocation(geolocation) },
   })
 })
