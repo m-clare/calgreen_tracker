@@ -88,14 +88,25 @@ const geoBuildingData = {
 }
 
 formattedPermits.map((permit) => {
-  const {geolocation, use_desc, ...rest} = permit;
-  geoBuildingData.features.push({
-    type: "Feature",
-    properties: {use_desc: use_desc},
-    geometry: { type: "Point", coordinates: parseGeolocation(geolocation) },
-  })
+  const {lat, lon, use_desc, ...rest} = permit;
+  if (lat !== null && lon !== null) {
+    geoBuildingData.features.push({
+      type: "Feature",
+      properties: {use_desc: use_desc},
+      geometry: { type: "Point", coordinates: [lon, lat] },
+    })
+  }
 })
+
+const categories = Array.from(new Set(formattedPermits.map((permit) => permit.use_desc).filter((permit) => permit !== null)))
+const numColors = categories.length 
+
+const colorScale = d3.scaleSequential(d3.interpolateSinebow)
+const colors = d3.quantize(colorScale, numColors)
+const colorMap = categories.map((kind, i) => [kind, colors[i]]).flat()
+console.log(colorMap)
 ```
+
 
 <div id="mapContainer" style="position: relative; height: calc(100vh - 300px); width: 100%;">
   <div id="features" style="z-index: 100;"></div>
@@ -105,14 +116,14 @@ formattedPermits.map((permit) => {
 const map = new maplibregl.Map({
   container: "mapContainer",
   zoom: 12,
-  maxZoom: 16,
-  minZoom: 10,
+  maxZoom: 14.99,
+  minZoom: 6,
   center: [-118.243683, 34.052235],
   pitch: 20,
   zoom: 8.6,
   maxBounds: [
-  [-120, 32],
-  [-116, 36],
+  [-118.951721, 32.75004],
+  [-117.646374, 34.823302]
   ],
   maplibreLogo: true,
   logoPosition: "bottom-left",
@@ -141,7 +152,12 @@ map.addLayer({
   type: "circle",
   paint: {
     "circle-radius": 5,
-    "circle-color": "#000000"
+    "circle-color": [
+    'match',
+    ['get', 'use_desc'],
+    ...colorMap,
+    "#FFFFFF"
+    ]
   }
   })
   
@@ -149,3 +165,10 @@ map.addLayer({
 
 ```
 
+```js
+formattedPermits.filter((permit) => permit.square_footage === null).length 
+```
+
+```js
+formattedPermits.filter((permit) => permit.square_footage === null).length / formattedPermits.length
+```
